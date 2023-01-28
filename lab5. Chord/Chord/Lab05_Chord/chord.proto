@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+// Registry
+
+service RegistryService {
+    rpc register(RegisterRequest) returns (RegisterReply) {}
+    rpc deregister(DeregisterRequest) returns (DeregisterReply) {}
+    rpc populate_finger_table(PopulateFingerTableRequest) returns (PopulateFingerTableReply) {}
+    rpc get_chord_info(GetChordInfoRequest) returns (GetChordInfoReply) {}
+}
+
+message RegisterRequest {
+    string ipaddr = 1;
+    string port = 2;
+}
+
+message RegisterReply {
+     int64 node_id = 1;
+     string message = 2;
+}
+
+message DeregisterRequest {
+    int64 node_id = 1;
+}
+
+message DeregisterReply {
+    bool result = 1;
+    string message = 2;
+}
+
+message PopulateFingerTableRequest {
+    int64 node_id = 1;
+}
+
+message PopulateFingerTableReply {
+    int64 node_id = 1;
+    repeated Node finger_table = 2;
+}
+
+message GetChordInfoRequest {
+    // Nothing
+}
+
+message GetChordInfoReply {
+    repeated Node nodes = 1;
+}
+
+message Node {
+    int64 id = 1;
+    string socket_addr = 2;
+}
+
+
+// Node
+
+service NodeService {
+    rpc get_finger_table(GetFingerTableRequest) returns (GetFingerTableReply) {}
+    rpc save(SaveRequest) returns (SaveReply) {}
+    rpc remove(RemoveRequest) returns (RemoveReply) {}
+    rpc find(FindRequest) returns (FindReply) {}
+    rpc get_data_from_successor(GetDataFromSuccessorRequest) returns (GetDataFromSuccessorReply) {}
+}
+
+message GetFingerTableRequest {
+    // Nothing
+}
+
+message GetDataFromSuccessorRequest {
+    // Nothing
+}
+
+message GetDataFromSuccessorReply {
+    repeated SaveRequest data = 1;
+}
+
+message GetFingerTableReply {
+    int64 node_id = 1;
+    repeated Node finger_table = 2;
+}
+
+message SaveRequest {
+    string key = 1;
+    string text = 2;
+}
+
+message SaveReply {
+    bool result = 1;
+    string message = 2;
+}
+
+message RemoveRequest {
+    string key = 1;
+}
+
+message RemoveReply {
+    bool result = 1;
+    string message = 2;
+}
+
+message FindRequest {
+    string key = 1;
+}
+
+message FindReply {
+    bool result = 1;
+    string message = 2;
+}
+
